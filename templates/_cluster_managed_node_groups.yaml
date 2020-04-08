@@ -1,0 +1,21 @@
+managedNodeGroups:
+  - name: mng-${CLUSTER_NAME}-worker
+    instanceType: ${CLUSTER_WORKER_INSTANCE_TYPE}
+    volumeSize: ${CLUSTER_WORKER_VOLUME_SIZE}
+    desiredCapacity: ${CLUSTER_WORKER_DESIRED_CAPACITY}
+    minSize: ${CLUSTER_WORKER_MIN_SIZE}
+    maxSize: ${CLUSTER_WORKER_MAX_SIZE}
+    labels: { role: ${CLUSTER_NAME}-worker }
+    tags:
+      ${TAG_REPFIX}Stack: ${CLUSTER_ENV}_${CLUSTER_NAME}
+      ${TAG_REPFIX}Application: ${CLUSTER_NAME}
+      ${TAG_REPFIX}Environment: ${CLUSTER_ENV}
+      ${TAG_REPFIX}Owner: ${CLUSTER_OWNER}
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        cloudWatch: true
+        ebs: true
+        efs: true
+        fsx: true
+        imageBuilder: true

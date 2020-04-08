@@ -1,0 +1,5 @@
+cloudWatch:
+  clusterLogging:
+    # available: ["api", "audit", "authenticator", "controllerManager", "scheduler"] or ["*"] for everything
+    # enableTypes: ["*"]
+    enableTypes: ${CLUSTER_LOGGING_TYPES}

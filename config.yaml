@@ -1,0 +1,33 @@
+CLUSTER:
+  NAME: new-vpc-cluster
+  REGION: us-east-1
+  EKS_VERSION: 1.15
+  ENV: development
+  OWNER: team@screwdriver.cd
+
+  LOGGING_TYPES: ["*"]
+
+  WORKER:
+    INSTANCE_TYPE: t2.xlarge
+    DESIRED_CAPACITY: 1
+    MIN_SIZE: 1
+    MAX_SIZE: 5
+    VOLUME_SIZE: 20
+    VOLUME_ENCRYPTED: true
+    UTILIZATION_THRESHOLD: 0.3
+
+  VPC:
+    PUBLIC_ACCESS: true
+    PRIVATE_ACCESS: true
+    CIDR: "192.168.240.0/20"
+
+TAG_REPFIX: "SD:"
+
+SD:
+  K8S_NAMESPACE: sd
+  INSTALL_OPTIONAL: true
+  API_HOST: api.cd.screwdriver.cd
+  STORE_HOST: store.cd.screwdriver.cd
+  RABBITMQ:
+    USERNAME: "iamreadonly"
+    PASSWORD: "pa$$w0rd"

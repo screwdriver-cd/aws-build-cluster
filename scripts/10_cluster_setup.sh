@@ -1,0 +1,74 @@
+#!/bin/bash -eo pipefail
+
+CWD=$(dirname ${BASH_SOURCE})
+template_dir=${GENERATED_DIR:-$CWD/../generated}
+mkdir -p $template_dir
+
+generate_cluster_manifest() {
+    # cluster configuration partial templates
+
+    if [[ -z $CLUSTER_NAME || -z $CLUSTER_REGION ]]; then
+        echo "Error: Cluster name and region must be present."
+        return 1
+    fi
+
+    echo "Generating cluster metadata..."
+    local -rx TEMPLATE_META=$(envsubst < $CWD/../templates/_cluster_meta.yaml)
+
+    if [[ -n $CLUSTER_ENVELOPE_ENCRYPTION_KEY_ARN ]]; then
+        echo "Generating cluster secrets envelope encryption..."
+        local -rx TEMPLATE_SECRETS_ENCRYPTION=$(envsubst < $CWD/../templates/_cluster_secrets_encryption.yaml)
+    fi
+
+    if [[ -n $CLUSTER_LOGGING_TYPES ]]; then
+        echo "Generating cluster CloudWatch logging..."
+        local -rx TEMPLATE_LOGGING=$(envsubst < $CWD/../templates/_cluster_logging.yaml)
+    fi
+
+    local -rx CLUSTER_VPC_PUBLIC_ACCESS=${CLUSTER_VPC_PUBLIC_ACCESS:-true}
+    local -rx CLUSTER_VPC_PRIVATE_ACCESS=${CLUSTER_VPC_PRIVATE_ACCESS:-true}
+
+    if [[ -n $CLUSTER_VPC_ID ]]; then
+        if [[ -z $CLUSTER_VPC_SUBNETS_PRIVATE && -z $CLUSTER_VPC_SUBNETS_PUBLIC ]]; then
+            echo "Error: Missing existing subnets information."
+            echo "Please enter configurations for 'CLUSTER_VPC_SUBNETS_*'."
+            return 1
+        fi
+
+        echo "Generating cluster existing VPC..."
+        local -rx TEMPLATE_VPC=$(envsubst < $CWD/../templates/_existing_vpc.yaml)
+    else
+        if [[ -z $CLUSTER_VPC_CIDR ]]; then
+            echo "Error: Missing CIDR for new VPC setup."
+            echo "Please enter configurations for 'CLUSTER_VPC_CIDR'."
+            return 1
+        fi
+
+        echo "Generating cluster new VPC..."
+        local -rx TEMPLATE_VPC=$(envsubst < $CWD/../templates/_new_vpc.yaml)
+    fi
+
+    if [[ "$CLUSTER_WORKER_VOLUME_ENCRYPTED" == "true" ]]; then
+        echo "Generating cluster self-managed node group..."
+        local -rx TEMPLATE_NODE_GROUPS=$(envsubst < $CWD/../templates/_cluster_node_groups.yaml)
+    else
+        echo "Generating cluster managed node group..."
+        local -rx TEMPLATE_MANAGED_NODE_GROUPS=$(envsubst < $CWD/../templates/_cluster_managed_node_groups.yaml)
+    fi
+
+    if [[ -n $CLUSTER_FARGATE_PROFILE_SELECTORS ]]; then
+        echo "Generating cluster fargate profile..."
+        local -rx TEMPLATE_FARGATE_PROFILES=$(envsubst < $CWD/../templates/_cluster_fargate_profile.yaml)
+    fi
+
+    envsubst < $CWD/../templates/_cluster.yaml > $template_dir/cluster.yaml
+    eksctl create cluster -f $template_dir/cluster.yaml -v 4
+}
+
+if [[ -e $CWD/../cluster.yaml ]]; then
+    echo "Creating cluster based on given cluster.yaml."
+    eksctl create cluster -f $CWD/../cluster.yaml -v 4
+else
+    echo "Composing cluster.yaml from given configurations."
+    generate_cluster_manifest
+fi

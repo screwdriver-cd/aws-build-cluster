@@ -1,0 +1,11 @@
+# Privileged containers are not supported on Fargate.
+# Fargate only works with private subnets.
+# Fargate node runs on containerd while node group on docker
+fargateProfiles:
+  - name: fp-${CLUSTER_NAME}
+    selectors: ${CLUSTER_FARGATE_PROFILE_SELECTORS}
+    tags:
+      ${TAG_REPFIX}Stack: ${CLUSTER_ENV}_${CLUSTER_NAME}
+      ${TAG_REPFIX}Application: ${CLUSTER_NAME}
+      ${TAG_REPFIX}Environment: ${CLUSTER_ENV}
+      ${TAG_REPFIX}Owner: ${CLUSTER_OWNER}

@@ -1,0 +1,30 @@
+nodeGroups:
+  - name: ng-${CLUSTER_NAME}-worker
+    privateNetworking: true
+    volumeEncrypted: ${CLUSTER_WORKER_VOLUME_ENCRYPTED}
+    volumeKmsKeyID: "${CLUSTER_WORKER_EBS_VOLUME_ENCRYPTION_KEY_ARN}"
+    volumeSize: ${CLUSTER_WORKER_VOLUME_SIZE}
+    instanceType: ${CLUSTER_WORKER_INSTANCE_TYPE}
+    desiredCapacity: ${CLUSTER_WORKER_DESIRED_CAPACITY}
+    minSize: ${CLUSTER_WORKER_MIN_SIZE}
+    maxSize: ${CLUSTER_WORKER_MAX_SIZE}
+    labels: { role: ${CLUSTER_NAME}-worker }
+    securityGroups:
+      withShared: true
+      withLocal: true
+    tags:
+      ${TAG_REPFIX}Stack: ${CLUSTER_ENV}_${CLUSTER_NAME}
+      ${TAG_REPFIX}Application: ${CLUSTER_NAME}
+      ${TAG_REPFIX}Environment: ${CLUSTER_ENV}
+      ${TAG_REPFIX}Owner: ${CLUSTER_OWNER}
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/${CLUSTER_NAME}: owned
+      k8s.io/cluster-autoscaler/node-template/label/role: ${CLUSTER_NAME}-worker
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        cloudWatch: true
+        ebs: true
+        efs: true
+        fsx: true
+        imageBuilder: true

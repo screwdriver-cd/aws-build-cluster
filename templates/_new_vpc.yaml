@@ -1,0 +1,7 @@
+vpc:
+  # VPC CIDR prefix must be between /16 and /24
+  # No overlapping with 172.17.0.0/16 CIDR range b/c Docker runs in that range
+  cidr: "${CLUSTER_VPC_CIDR}"
+  clusterEndpoints:
+    publicAccess: ${CLUSTER_VPC_PUBLIC_ACCESS}
+    privateAccess: ${CLUSTER_VPC_PRIVATE_ACCESS}

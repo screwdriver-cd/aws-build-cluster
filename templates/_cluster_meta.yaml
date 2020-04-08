@@ -1,0 +1,9 @@
+metadata:
+  name: ${CLUSTER_NAME}
+  region: ${CLUSTER_REGION}
+  version: "${CLUSTER_EKS_VERSION}"
+  tags:
+    ${TAG_REPFIX}Stack: ${CLUSTER_ENV}_${CLUSTER_NAME}
+    ${TAG_REPFIX}Application: ${CLUSTER_NAME}
+    ${TAG_REPFIX}Environment: ${CLUSTER_ENV}
+    ${TAG_REPFIX}Owner: ${CLUSTER_OWNER}

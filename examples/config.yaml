@@ -1,0 +1,96 @@
+CLUSTER:
+  NAME: example-cluster
+  REGION: us-east-1
+
+  # mostly for tagging purpose
+  ENV: development
+  OWNER: team@screwdriver.cd
+
+  # recommend pinning specific K8s version
+  EKS_VERSION: 1.15
+
+  # ["api", "audit", "authenticator", "controllerManager", "scheduler"] or ["*"] for everything
+  LOGGING_TYPES: ["*"]
+
+  # KMS key arn for EKS cluster secrets envelope encryption
+  ENVELOPE_ENCRYPTION_KEY_ARN: ""
+
+  WORKER:
+    # EC2 instance type for the build workers
+    INSTANCE_TYPE: t2.xlarge
+
+    # number of worker to start with
+    DESIRED_CAPACITY: 1
+
+    # min number of worker for the node group
+    MIN_SIZE: 1
+
+    # max number of worker for the node group
+    MAX_SIZE: 2
+
+    # EC2 EBS volume size
+    VOLUME_SIZE: 20
+
+    # flag to enable EBS volume encryption
+    # if false, EKS managed node group will be used instead of self-managed node group
+    VOLUME_ENCRYPTED: true
+
+    # KMS key arn for EC2 EBS volume encryption
+    EBS_VOLUME_ENCRYPTION_KEY_ARN: ""
+
+    # worker utilization level below which downscaling will be performed
+    UTILIZATION_THRESHOLD: 0.3
+
+    # K8s storage class for persistent volume on EKS
+    PV_SC: gp2
+
+  # array of selectors (namespace & label) for pod to be run in Fargate node
+  # avoid including "kube-system" as cluster-autoscaler will run in that namespace and require file system
+  FARGATE_PROFILE_SELECTORS:
+    - namespace: default
+
+  VPC:
+    # Cluster Endpoints public access
+    PUBLIC_ACCESS: true
+
+    # Cluster Endpoints private access
+    PRIVATE_ACCESS: true
+
+    # VPC resource ID, for existing VPC setup
+    ID: ""
+    # VPC cidr, for both new and existing VPC setup
+    CIDR: "192.168.240.0/20"
+
+    SUBNETS:
+      # private subnets, at least 2 for existing VPC setup
+      PRIVATE:
+        us-east-1a: { id: "subnet-xxx", cidr: "192.168.246.0/23" }
+        us-east-1b: { id: "subnet-yyy", cidr: "192.168.248.0/23" }
+
+      # public subnets
+      PUBLIC: {}
+
+# prefix for preset tag name
+TAG_REPFIX: "Corp:"
+
+# path to store generated manifest files
+GENERATED_DIR: ""
+
+SD:
+  # K8s namespace for build cluster worker and build workers
+  K8S_NAMESPACE: sd
+
+  # whether or not to install kubernetes dashboard and prometheus
+  INSTALL_OPTIONAL: false
+
+  # Hostname for Screwdriver API service
+  API_HOST: api.cd.screwdriver.cd
+
+  # Hostname for Screwdriver Store service
+  STORE_HOST: store.cd.screwdriver.cd
+
+  # login credentials for RabbitMQ
+  # recommend inject these as environment variables instead of storing as plain text
+  RABBITMQ:
+    USERNAME: ""
+    PASSWORD: ""

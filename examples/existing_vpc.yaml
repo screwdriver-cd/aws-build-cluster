@@ -1,0 +1,48 @@
+CLUSTER:
+  NAME: existing-vpc-cluster
+  REGION: us-east-1
+  EKS_VERSION: 1.15
+  ENV: development
+  OWNER: team@screwdriver.cd
+
+  LOGGING_TYPES: ["*"]
+
+  WORKER:
+    INSTANCE_TYPE: t2.xlarge
+    DESIRED_CAPACITY: 1
+    MIN_SIZE: 1
+    MAX_SIZE: 5
+    VOLUME_SIZE: 20
+    VOLUME_ENCRYPTED: true
+    UTILIZATION_THRESHOLD: 0.3
+
+  VPC:
+    PUBLIC_ACCESS: true
+    PRIVATE_ACCESS: true
+    ID: "vpc-123"
+    SUBNETS:
+      PRIVATE:
+        us-east-1a:
+          id: "subnet-xxx"
+        us-east-1b:
+          id: "subnet-yyy"
+
+TAG_REPFIX: "SD:"
+
+SD:
+  K8S_NAMESPACE: sd
+
+  # whether or not to install kubernetes dashboard and prometheus
+  INSTALL_OPTIONAL: false
+
+  # Hostname for Screwdriver API service
+  API_HOST: api.cd.screwdriver.cd
+
+  # Hostname for Screwdriver Store service
+  STORE_HOST: store.cd.screwdriver.cd
+
+  # login credentials for RabbitMQ
+  # recommend inject these as environment variables instead of storing as plain text
+  RABBITMQ:
+    USERNAME: ""
+    PASSWORD: ""
