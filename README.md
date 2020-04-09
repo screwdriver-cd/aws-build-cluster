@@ -44,10 +44,13 @@ Second, configure the AWS CLI by running `aws configure` with your AWS credentia
 Next, to begin the infrastructure provisioning process:
 
 ```sh
+# by default, run.sh will try to find "config.yaml" at CWD if no argument is passed
 ./run.sh path-to-config.yaml
 ```
 
-`./run.sh` will first prepare the shell environment setup, then sequentially execute scripts in `scripts/` directory in alphanumerical order. You can freely insert your own scripts in the order you want by manipulating the naming convention for the scripts.
+`./run.sh` will first prepare the shell environment setup based on given configs, then sequentially execute scripts in `scripts/` directory in alphanumerical order. You can freely insert your own scripts in the order you want by manipulating the naming convention for the scripts.
+
+And if you already have a `cluster.yaml` at the root dir, which is compatible with eksctl, it will be used instead of. Otherwise, a generated `cluster.yaml` will be created in the directory specified by the config `GENERATED_DIR` in your config file. *(see [below](#config-definitions))*
 
 ### Considerations for VPC setup
 
@@ -96,6 +99,8 @@ CLUSTER_NAME=my-cluster
 CLUSTER_VPC_ID=vpc-xxx
 CLUSTER_VPC_SUBNETS_PRIVATE={"us-east-1a":{"id":"subnet-xxx"},"us-east-1b":{"id":"subnet-yyy"}}
 ```
+
+### Config Definitions
 
 The following table describes all the configurable options one can put in the `config.yaml`. There is a fully documented sample `config.yaml` in the `/examples` directory.
 
