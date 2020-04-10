@@ -11,6 +11,7 @@
     * [How do I enable EC2 level configurations for the worker node group, such as bootstrap command and SSH access?](#how-do-i-enable-ec2-level-configurations-for-the-worker-node-group-such-as-bootstrap-command-and-ssh-access)
     * [How do I make the worker node launched with custom AMI?](#how-do-i-make-the-worker-node-launched-with-custom-ami)
     * [How do I run GPU worker instances?](#how-do-i-run-gpu-worker-instances)
+    * [Cluster Autoscaler is having issue scaling](#cluster-autoscaler-is-having-issue-scaling)
 <!--- TOC END -->
 
 ## VPC Setup
@@ -68,5 +69,11 @@ In order to launch worker node with a custom AMI, you must use self-managed node
 ### How do I run GPU worker instances?
 
 First, you need to choose the EC2 instance type with GPU support, then you will have to look up the EKS-optimized AMIs with GPU support, and at last you have to install NVIDIA device plugin on the EKS cluster. Please refer to https://docs.aws.amazon.com/eks/latest/userguide/gpu-ami.html and https://eksctl.io/usage/gpu-support/ for more details on GPU instance.
+
+---
+
+### Cluster Autoscaler is having issue scaling
+
+You should always try to look for hints from the logs or K8s events related to Cluster Autoscaler (CA). The most trivial case is that either the min/max number of instances has been reached. However, if there is something about the underlying Auto Scaling Group (ASG) failed to create new instance and if you have enabled KMS volume encryption, you need to make sure the KMS key has already granted access for AWS service-linked role for ASG, `AWSServiceRoleForAutoScaling`. And if CA isn't scaling down where it's supposed to, check the node instance utilization level to see if it's below the threshold set by `CLUSTER_WORKER_UTILIZATION_THRESHOLD` in the config. By default, CA would terminate a node if it's well below that threshold for 10 minutes. You can confirm that by checking CA's logs.
 
 ---

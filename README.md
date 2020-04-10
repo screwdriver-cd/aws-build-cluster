@@ -120,7 +120,7 @@ The following table describes all the configurable options one can put in the `c
 | CLUSTER_WORKER_MAX_SIZE | Integer | Maximum number of worker in node group |
 | CLUSTER_WORKER_VOLUME_SIZE | Integer | EBS gp2 volume size in GiB |
 | CLUSTER_WORKER_VOLUME_ENCRYPTED | Boolean | Flag to enable EBS volume encryption. If false, EKS managed node group will be used instead of self-managed node group |
-| CLUSTER_WORKER_EBS_VOLUME_ENCRYPTION_KEY_ARN | String | KMS key arn for EC2 EBS volume encryption |
+| CLUSTER_WORKER_EBS_VOLUME_ENCRYPTION_KEY_ARN | String | KMS key arn for EC2 EBS volume encryption. Make sure to grant `AWSServiceRoleForAutoScaling` the use of the key beforehand. Also you need to grant access of the key to the worker node instance's IAM role if you are creating persistent volume using storage class with KMS encryption |
 | CLUSTER_WORKER_UTILIZATION_THRESHOLD | Number | Worker utilization level below which downscaling will be performed. Default: 0.5 |
 | CLUSTER_PV_SC | String | K8s storage class to use for PV. Default: gp2 |
 | CLUSTER_FARGATE_PROFILE_SELECTORS | Object[] | Array of selectors (namespace & label) for pod to be run in Fargate node. *Avoid including "kube-system" as cluster-autoscaler will run in that namespace and require file system* |
