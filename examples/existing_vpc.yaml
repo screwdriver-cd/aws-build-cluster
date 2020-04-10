@@ -36,10 +36,10 @@ SD:
   INSTALL_OPTIONAL: false
 
   # Hostname for Screwdriver API service
-  API_HOST: api.cd.screwdriver.cd
+  API_HOST: api.screwdriver.cd
 
   # Hostname for Screwdriver Store service
-  STORE_HOST: store.cd.screwdriver.cd
+  STORE_HOST: store.screwdriver.cd
 
   # login credentials for RabbitMQ
   # recommend inject these as environment variables instead of storing as plain text

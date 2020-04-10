@@ -26,8 +26,8 @@ TAG_REPFIX: "SD:"
 SD:
   K8S_NAMESPACE: sd
   INSTALL_OPTIONAL: true
-  API_HOST: api.cd.screwdriver.cd
-  STORE_HOST: store.cd.screwdriver.cd
+  API_HOST: api.screwdriver.cd
+  STORE_HOST: store.screwdriver.cd
   RABBITMQ:
     USERNAME: "iamreadonly"
     PASSWORD: "pa$$w0rd"
