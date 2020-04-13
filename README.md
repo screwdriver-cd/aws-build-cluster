@@ -125,7 +125,9 @@ The following table describes all the configurable options one can put in the `c
 | CLUSTER_PV_SC | String | K8s storage class to use for PV. Default: gp2 |
 | CLUSTER_FARGATE_PROFILE_SELECTORS | Object[] | Array of selectors (namespace & label) for pod to be run in Fargate node. *Avoid including "kube-system" as cluster-autoscaler will run in that namespace and require file system* |
 | CLUSTER_VPC_ID | String | VPC resource ID, for existing VPC setup |
-| CLUSTER_VPC_CIDR | String | VPC CIDR, for both new and existing VPC setup. Must be between `/16` and `/24`. |
+| CLUSTER_VPC_CIDR | String | VPC CIDR, for both new and existing VPC setup. Must be between `/16` and `/24` |
+| CLUSTER_VPC_PUBLIC_ACCESS | Boolean | Allow public cluster endpoint access. Default: true |
+| CLUSTER_VPC_PRIVATE_ACCESS | Boolean | Allow private cluster endpoint access. Default: true |
 | CLUSTER_VPC_SUBNETS_PRIVATE | Object | Private subnets, requires at least 2 for existing VPC setup. `{ [AZ name]: { id: "subnet_id", cidr: "subnet_cidr" } }` |
 | CLUSTER_VPC_SUBNETS_PUBLIC | Object | Public subnets for existing VPC setup. `{ [AZ name]: { id: "subnet_id", cidr: "subnet_cidr" } }` |
 | TAG_REPFIX | String | Prefix for tag preset name |
