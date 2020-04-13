@@ -77,8 +77,29 @@ TAG_REPFIX: "Corp:"
 GENERATED_DIR: ""
 
 SD:
-  # K8s namespace for build cluster worker and build workers
-  K8S_NAMESPACE: sd
+  K8S:
+    # K8s namespace for build cluster worker and build workers
+    NAMESPACE: sd
+
+    # Screwdriver launcher version to be deployed on the build pod
+    LAUNCHER_VERSION: latest
+
+    # prefix to the meta info about the build pod, e.g. pod name and label
+    BUILD_PREFIX: "staging-"
+
+    # Build pod CPU resource limits in vCPU, an be fractional
+    CPU:
+      MICRO: 0.5
+      LOW: 1
+      HIGH: 2
+      TURBO: 4
+
+    # Build pod Memory resource limits in GiB. Must be integer
+    MEMORY:
+      MICRO: 1
+      LOW: 2
+      HIGH: 4
+      TURBO: 8
 
   # whether or not to install kubernetes dashboard and prometheus
   INSTALL_OPTIONAL: false
@@ -89,8 +110,24 @@ SD:
   # Hostname for Screwdriver Store service
   STORE_HOST: store.screwdriver.cd
 
-  # login credentials for RabbitMQ
-  # recommend inject these as environment variables instead of storing as plain text
   RABBITMQ:
+    # FQDN for Rabbitmq service
+    HOST: rabbitmq.screwdriver.cd
+    PORT: 9000
+
+    # RabbitMQ virtual host
+    VHOST: "/screwdriver"
+
+    # RabbitMQ exchange for routing message to your queue
+    EXCHANGE: build
+
+    # name of your RabbitMQ queue to receive message
+    QUEUE: my-aws-job-queue
+
+    # name of your RabbitMQ queue to receive dead-lettered message
+    DLQ: my-aws-job-dlq
+
+    # login credentials for RabbitMQ
+    # recommend inject these as environment variables instead of storing as plain text
     USERNAME: ""
     PASSWORD: ""

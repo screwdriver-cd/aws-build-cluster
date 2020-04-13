@@ -12,7 +12,6 @@ kubectl apply -f $template_dir/cluster_autoscaler.yaml
 # install container insights daemonsets for CloudWatch and FluentD agent
 curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluentd-quickstart.yaml | sed "s/{{cluster_name}}/${CLUSTER_NAME}/;s/{{region_name}}/${CLUSTER_REGION}/" | kubectl apply -f -
 
-
 # install / upgrade VPC CNI Plugin
 kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.6/aws-k8s-cni.yaml
 

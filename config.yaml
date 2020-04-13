@@ -24,10 +24,29 @@ CLUSTER:
 TAG_REPFIX: "SD:"
 
 SD:
-  K8S_NAMESPACE: sd
+  K8S:
+    NAMESPACE: sd
+    LAUNCHER_VERSION: latest
+    BUILD_PREFIX: ""
+    CPU:
+      MICRO: 0.5
+      LOW: 1
+      HIGH: 2
+      TURBO: 4
+    MEMORY:
+      MICRO: 1
+      LOW: 2
+      HIGH: 4
+      TURBO: 8
   INSTALL_OPTIONAL: true
   API_HOST: api.screwdriver.cd
   STORE_HOST: store.screwdriver.cd
   RABBITMQ:
+    HOST: rabbitmq.screwdriver.cd
+    PORT: 9000
+    VHOST: "/screwdriver"
+    EXCHANGE: build
+    QUEUE: my-aws-job-queue
+    DLQ: my-aws-job-dlq
     USERNAME: "iamreadonly"
     PASSWORD: "pa$$w0rd"

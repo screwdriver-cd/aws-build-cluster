@@ -12,6 +12,7 @@
     * [How do I make the worker node launched with custom AMI?](#how-do-i-make-the-worker-node-launched-with-custom-ami)
     * [How do I run GPU worker instances?](#how-do-i-run-gpu-worker-instances)
     * [Cluster Autoscaler is having issue scaling](#cluster-autoscaler-is-having-issue-scaling)
+    * [How do I build docker container image in a build?](#how-do-i-build-docker-container-image-in-a-build)
 <!--- TOC END -->
 
 ## VPC Setup
@@ -75,5 +76,11 @@ First, you need to choose the EC2 instance type with GPU support, then you will 
 ### Cluster Autoscaler is having issue scaling
 
 You should always try to look for hints from the logs or K8s events related to Cluster Autoscaler (CA). The most trivial case is that either the min/max number of instances has been reached. However, if there is something about the underlying Auto Scaling Group (ASG) failed to create new instance and if you have enabled KMS volume encryption, you need to make sure the KMS key has already granted access for AWS service-linked role for ASG, `AWSServiceRoleForAutoScaling`. And if CA isn't scaling down where it's supposed to, check the node instance utilization level to see if it's below the threshold set by `CLUSTER_WORKER_UTILIZATION_THRESHOLD` in the config. By default, CA would terminate a node if it's well below that threshold for 10 minutes. You can confirm that by checking CA's logs.
+
+---
+
+### How do I build docker container image in a build?
+
+Assuming the Screwdriver cluster your build cluster connects to does have `DOCKER_FEATURE_ENABLED` on its API, you have to specify the annotation `screwdriver.cd/dockerEnabled: true` on the Screwdriver job to enable this feature on the executor side. Because `k8s` is the executor plugin chosen for the AWS build cluster worker, the only way to build container images is using a `dind` sidecar container alongside the build container in the same pod. Please refer to https://docs.screwdriver.cd/user-guide/configuration/annotations.html for other annotations related to docker.
 
 ---

@@ -48,7 +48,7 @@ Next, to begin the infrastructure provisioning process:
 ./run.sh path-to-config.yaml
 ```
 
-`./run.sh` will first prepare the shell environment setup based on given configs, then sequentially execute scripts in `scripts/` directory in alphanumerical order. You can freely insert your own scripts in the order you want by manipulating the naming convention for the scripts.
+`./run.sh` will first prepare the shell environment setup based on given configs, then sequentially execute bash scripts in `scripts/` directory in alphanumerical order. You can freely insert your own bash scripts in the order you want by manipulating the naming convention for the scripts.
 
 And if you already have a `cluster.yaml` at the root dir, which is compatible with eksctl, it will be used instead of. Otherwise, a generated `cluster.yaml` will be created in the directory specified by the config `GENERATED_DIR` in your config file. *(see [below](#config-definitions))*
 
@@ -131,9 +131,25 @@ The following table describes all the configurable options one can put in the `c
 | TAG_REPFIX | String | Prefix for tag preset name |
 | GENERATED_DIR | String | Path to store generated manifest files. Default: {root_dir}/generated |
 | SD_K8S_NAMESPACE | String | K8s namespace for build cluster worker and build workers. Default: sd |
+| SD_K8S_LAUNCHER_VERSION | String | Screwdriver launcher version to be used on the build worker. Default: latest |
+| SD_K8S_BUILD_PREFIX | String | Prefix included in build worker pod name, label and other meta data. Default: "" |
+| SD_K8S_CPU_MICRO | Number | Number of vCPU in the annotated `screwdriver.cd/cpu: MICRO` setting. Default: 0.5 |
+| SD_K8S_CPU_LOW | Number | Number of vCPU in the annotated `screwdriver.cd/cpu: LOW` setting. Default: 2 |
+| SD_K8S_CPU_HIGH | Number | Number vCPU in the annotated `screwdriver.cd/cpu: HIGH` setting. Default: 6 |
+| SD_K8S_CPU_TURBO | Number | Number vCPU in the annotated `screwdriver.cd/cpu: TURBO` setting. Default: 12 |
+| SD_K8S_MEMORY_MICRO | Integer | Number of memory in GiB in the annotated `screwdriver.cd/ram: MICRO` setting. Default: 1 |
+| SD_K8S_MEMORY_LOW | Integer | Number of memory in GiB in the annotated `screwdriver.cd/ram: LOW` setting. Default: 2 |
+| SD_K8S_MEMORY_HIGH | Integer | Number of memory in GiB in the annotated `screwdriver.cd/ram: HIGH` setting. Default: 12 |
+| SD_K8S_MEMORY_TURBO | Integer | Number of memory in GiB in the annotated `screwdriver.cd/ram: TURBO` setting. Default: 16 |
 | SD_INSTALL_OPTIONAL | Boolean | Whether or not to install kubernetes dashboard and prometheus |
 | SD_API_HOST <sup>*</sup> | String | Hostname for Screwdriver API service |
 | SD_STORE_HOST <sup>*</sup> | String | Hostname for Screwdriver Store service |
+| SD_RABBITMQ_HOST <sup>*</sup> | String | RabbitMQ Host FQDN |
+| SD_RABBITMQ_PORT <sup>*</sup> | Integer | RabbitMQ Host port number |
+| SD_RABBITMQ_VHOST <sup>*</sup> | String | RabbitMQ virtual host name |
+| SD_RABBITMQ_EXCHANGE <sup>*</sup> | String | RabbitMQ exchange name |
+| SD_RABBITMQ_QUEUE <sup>*</sup> | String | RabbitMQ queue name under given virtual host name in the config |
+| SD_RABBITMQ_DLQ <sup>*</sup> | String | RabbitMQ Dead Letter Queue name under given virtual host name in the config |
 | SD_RABBITMQ_USERNAME <sup>*</sup> | String | RabbitMQ username |
 | SD_RABBITMQ_PASSWORD <sup>*</sup> | String | RabbitMQ password |
 

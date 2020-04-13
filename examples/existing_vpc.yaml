@@ -30,19 +30,29 @@ CLUSTER:
 TAG_REPFIX: "SD:"
 
 SD:
-  K8S_NAMESPACE: sd
-
-  # whether or not to install kubernetes dashboard and prometheus
+  K8S:
+    NAMESPACE: sd
+    LAUNCHER_VERSION: latest
+    BUILD_PREFIX: ""
+    CPU:
+      MICRO: 0.5
+      LOW: 1
+      HIGH: 2
+      TURBO: 4
+    MEMORY:
+      MICRO: 1
+      LOW: 2
+      HIGH: 4
+      TURBO: 8
   INSTALL_OPTIONAL: false
-
-  # Hostname for Screwdriver API service
   API_HOST: api.screwdriver.cd
-
-  # Hostname for Screwdriver Store service
   STORE_HOST: store.screwdriver.cd
-
-  # login credentials for RabbitMQ
-  # recommend inject these as environment variables instead of storing as plain text
   RABBITMQ:
+    HOST: rabbitmq.screwdriver.cd
+    PORT: 9000
+    VHOST: "/screwdriver"
+    EXCHANGE: build
+    QUEUE: my-aws-job-queue
+    DLQ: my-aws-job-dlq
     USERNAME: ""
     PASSWORD: ""
