@@ -1,4 +1,5 @@
-#!/bin/bash -eo pipefail
+#!/bin/bash
+set -eo pipefail
 
 declare -r deps=(jq yq envsubst aws eksctl kubectl helm)
 declare -r install_docs=(

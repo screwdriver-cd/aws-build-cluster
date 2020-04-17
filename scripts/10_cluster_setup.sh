@@ -1,4 +1,5 @@
-#!/bin/bash -eo pipefail
+#!/bin/bash
+set -eo pipefail
 
 CWD=$(dirname ${BASH_SOURCE})
 template_dir=${GENERATED_DIR:-$CWD/../generated}
