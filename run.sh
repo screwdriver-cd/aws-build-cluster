@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 
+CWD=$(dirname ${BASH_SOURCE})
+
 declare -r deps=(jq yq envsubst aws eksctl kubectl helm)
 declare -r install_docs=(
     'https://github.com/stedolan/jq/releases/latest'
@@ -29,7 +31,7 @@ inject_env_from_config() {
 `inject_env_from_config ${1:-./config.yaml}`
 
 
-for script in `ls $PWD/scripts/*`; do
+for script in `ls $CWD/scripts/*`; do
     echo "Executing:" $script
     source "$script"
 done
