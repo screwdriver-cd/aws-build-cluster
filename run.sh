@@ -28,10 +28,31 @@ inject_env_from_config() {
     yq r -j $1 | jq -r 'def spread(v): v | keys[] as $k | .[$k] | if (.|type == "object") then to_entries | .[] | if (.value|type == "object") and (.value|keys|all(test("^[A-Z_]+$"))) then spread({ ($k + "_" + .key): .value }) else "export \($k)_\(.key)=\(.value)" end else "export \($k)=\(.)" end; spread(.)'
 }
 
-`inject_env_from_config ${1:-./config.yaml}`
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -s|--scripts)
+            scripts=($(tr ',' ' ' <<< $2))
+            shift 2
+            ;;
+        -*)
+            echo "Unkown flag" $1
+            exit 1
+            ;;
+        *)
+            if [[ -n $config_file ]]; then
+                echo "Unknown argument" $1
+                exit 1
+            fi
 
+            config_file=$1
+            shift
+            ;;
+    esac
+done
 
-for script in `ls $CWD/scripts/*`; do
+`inject_env_from_config ${config_file:-./config.yaml}`
+
+for script in ${scripts[@]:-$(ls $CWD/scripts/*)}; do
     echo "Executing:" $script
     source "$script"
 done

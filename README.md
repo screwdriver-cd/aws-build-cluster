@@ -45,10 +45,18 @@ Next, to begin the infrastructure provisioning process:
 
 ```sh
 # by default, run.sh will try to find "config.yaml" at CWD if no argument is passed
-./run.sh path-to-config.yaml
+# -s/--scripts is intended for custom setup
+./run.sh path-to-config.yaml [-s/--scripts comma-separated-list-of-scripts]
 ```
 
 `./run.sh` will first prepare the shell environment setup based on given configs, then sequentially execute bash scripts in `scripts/` directory in alphanumerical order. You can freely insert your own bash scripts in the order you want by manipulating the naming convention for the scripts.
+
+However, if you just want to execute certain scripts either from the defaults or something of your own, you can optionally do the following:
+
+```sh
+# execute scripts "20_deployments" and "30_build_cluster_worker" inside scripts/ with configs from ./examples/existing_vpc.yaml
+./run.sh ./examples/existing_vpc.yaml -s ./scripts/20_deployments,./scripts/30_build_cluster_worker
+```
 
 And if you already have a `cluster.yaml` at the root dir, which is compatible with eksctl, it will be used instead of. Otherwise, a generated `cluster.yaml` will be created in the directory specified by the config `GENERATED_DIR` in your config file. *(see [below](#config-definitions))*
 
@@ -74,7 +82,7 @@ Example configuration is located in [`examples/existing_vpc.yaml`](./examples/ex
 
 #### Existing VPC with existing K8s cluster
 
-This scenario assumes that you already have an operating K8s cluster with dedicated ndoe group in your cloud infrastructure. Then all you need to do is to run `scripts/30_build_cluster_worker.sh`
+This scenario assumes that you already have an operating K8s cluster with dedicated ndoe group in your cloud infrastructure. Then all you need to do is to run `scripts/30_build_cluster_worker` with all the depdendent variables assigned or else compose a config file with what you need and pass it as argument to `./run.sh`.
 
 ## Configurations
 
