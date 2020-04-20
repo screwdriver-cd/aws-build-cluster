@@ -16,6 +16,7 @@ This tool relies heavily on other open source tools, especially [eksctl](https:/
 
 The followings are the external dependencies required to run this tool:
 
+- [bash](https://www.gnu.org/software/bash/)
 - [jq](https://github.com/stedolan/jq/releases/latest)
 - [yq](https://github.com/mikefarah/yq/releases/latest)
 - [envsubst](https://formulae.brew.sh/formula/gettext), part of the [`gettext` package](https://www.gnu.org/software/gettext/)
@@ -59,6 +60,18 @@ However, if you just want to execute certain scripts either from the defaults or
 ```
 
 And if you already have a `cluster.yaml` at the root dir, which is compatible with eksctl, it will be used instead of. Otherwise, a generated `cluster.yaml` will be created in the directory specified by the config `GENERATED_DIR` in your config file. *(see [below](#config-definitions))*
+
+In contrast, if you wish to delete all nodegroups in your cluster,
+
+```sh
+./run.sh ./examples/config.yaml -d nodegroup
+```
+
+or even the entire cluster,
+
+```sh
+./run.sh ./examples/config.yaml -d cluster
+```
 
 ### Considerations for VPC setup
 

@@ -34,6 +34,10 @@ while [[ $# -gt 0 ]]; do
             scripts=($(tr ',' ' ' <<< $2))
             shift 2
             ;;
+        -d|--destroy)
+            destroy=$2
+            shift 2
+            ;;
         -*)
             echo "Unkown flag" $1
             exit 1
@@ -51,6 +55,13 @@ while [[ $# -gt 0 ]]; do
 done
 
 `inject_env_from_config ${config_file:-./config.yaml}`
+
+if ! [[ "$destroy" =~ ^(cluster|nodegroup)$ ]]; then
+    echo "Error: you can only destroy cluster or nodegroup."
+    exit 1;
+fi
+
+declare -rx DESTROY=${destroy,,}
 
 for script in ${scripts[@]:-$(ls $CWD/scripts/*)}; do
     echo "Executing:" $script

@@ -4,6 +4,8 @@ set -eo pipefail
 CWD=$(dirname ${BASH_SOURCE})
 template_dir=${GENERATED_DIR:-$CWD/../generated}
 mkdir -p $template_dir
+op=create
+resource=cluster
 
 generate_cluster_manifest() {
     # cluster configuration partial templates
@@ -63,13 +65,23 @@ generate_cluster_manifest() {
     fi
 
     envsubst < $CWD/../templates/_cluster.yaml > $template_dir/cluster.yaml
-    eksctl create cluster -f $template_dir/cluster.yaml -v 4
+    eksctl $op $resource -f $template_dir/cluster.yaml -v 4 $approve_flag
 }
 
+if [[ -n $DESTROY ]]; then
+    op=delete
+    resource=$DESTROY
+
+    if [[ "$DESTROY" == "nodegroup" ]]; then
+        # deleting nodegroup need --approve flag
+        approve_flag="--aprove"
+    fi
+fi
+
 if [[ -e $CWD/../cluster.yaml ]]; then
-    echo "Creating cluster based on given cluster.yaml."
-    eksctl create cluster -f $CWD/../cluster.yaml -v 4
+    echo "${op^} $resource based on given cluster.yaml."
+    eksctl $op $resource -f $CWD/../cluster.yaml -v 4 $approve_flag
 else
-    echo "Composing cluster.yaml from given configurations."
+    echo "Composing cluster.yaml from given configurations to $op $resource."
     generate_cluster_manifest
 fi
