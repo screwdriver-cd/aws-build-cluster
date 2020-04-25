@@ -61,7 +61,7 @@ spec:
       serviceAccountName: build-cluster-worker
       containers:
         - name: screwdriver-build-cluster-worker
-          image: screwdrivercd/buildcluster-queue-worker:v1.11.0
+          image: screwdrivercd/buildcluster-queue-worker:stable
           imagePullPolicy: IfNotPresent
           env:
             - name: CIRCUIT_TIMEOUT
