@@ -1,5 +1,6 @@
 managedNodeGroups:
   - name: mng-${CLUSTER_NAME}-worker
+    privateNetworking: true
     instanceType: ${CLUSTER_WORKER_INSTANCE_TYPE}
     volumeSize: ${CLUSTER_WORKER_VOLUME_SIZE}
     desiredCapacity: ${CLUSTER_WORKER_DESIRED_CAPACITY}
