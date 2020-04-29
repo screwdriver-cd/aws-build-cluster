@@ -164,6 +164,7 @@ The following table describes all the configurable options one can put in the `c
 | SD_K8S_MEMORY_LOW | Integer | Number of memory in GiB in the annotated `screwdriver.cd/ram: LOW` setting. Default: 2 |
 | SD_K8S_MEMORY_HIGH | Integer | Number of memory in GiB in the annotated `screwdriver.cd/ram: HIGH` setting. Default: 12 |
 | SD_K8S_MEMORY_TURBO | Integer | Number of memory in GiB in the annotated `screwdriver.cd/ram: TURBO` setting. Default: 16 |
+| SD_K8S_PRIVILEGED | Boolean | Enable privileged mode for build container |
 | SD_INSTALL_OPTIONAL | Boolean | Whether or not to install AWS node termination handler, kubernetes dashboard and prometheus |
 | SD_API_HOST <sup>*</sup> | String | Hostname for Screwdriver API service |
 | SD_STORE_HOST <sup>*</sup> | String | Hostname for Screwdriver Store service |
