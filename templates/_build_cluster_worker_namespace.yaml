@@ -18,3 +18,54 @@ type: Opaque
 stringData:
   username: ${SD_RABBITMQ_USERNAME}
   password: ${SD_RABBITMQ_PASSWORD}
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: build-cluster-worker
+  name: build-cluster-worker
+  namespace: ${SD_K8S_NAMESPACE}
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: build-worker
+  name: build-worker
+  namespace: ${SD_K8S_NAMESPACE}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: build-cluster-worker
+  namespace: ${SD_K8S_NAMESPACE}
+  labels:
+    k8s-app: build-cluster-worker
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection", "proxy"]
+  - apiGroups: [""]
+    resources: ["pods/status"]
+    verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: build-cluster-worker
+  namespace: ${SD_K8S_NAMESPACE}
+  labels:
+    k8s-app: build-cluster-worker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: build-cluster-worker
+subjects:
+  - kind: ServiceAccount
+    name: build-cluster-worker
+    namespace: ${SD_K8S_NAMESPACE}
